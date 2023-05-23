@@ -55,7 +55,7 @@ public class ProductController {
     AuthorService authorService;
 
     @GetMapping("/get")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public List<ProductDto> getProducts() {
         List<ProductDto> body = productService.listProducts();
    return  body;
@@ -75,7 +75,7 @@ public class ProductController {
 //    }
 
     @PostMapping("/addProduct")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<ApiResponse> addProduct(@RequestPart("products") ProductDto productDto, @RequestPart("imageFile") MultipartFile file) {
         Optional<Category> optionalCategory = categoryService.readCategory(productDto.getCategoryId());
         Optional<Author> optionalAuthor = authorService.readAuthor(productDto.getAuthorId());
@@ -111,7 +111,7 @@ public class ProductController {
         return imageModel;
     }
     @GetMapping({"/getProductById/{productId}"})
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ProductDto getProductDetailsById(@PathVariable("productId") Integer id) {
         return productService.findById(id);
     }
@@ -134,7 +134,7 @@ public class ProductController {
 
     }
     @PostMapping(value = {"/addUser/{username}"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<ApiResponse> addUser(@RequestPart("user") UserDto userDto , @RequestPart("imageUser") MultipartFile file, @PathVariable("username") String username) {
 
         try {
@@ -187,7 +187,7 @@ public class ProductController {
         );
     }
     @GetMapping("/category/{categoryId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Integer categoryId) {
         List<Product> products = productService.getProductsByCategory(categoryId);
         return ResponseEntity.ok(products);
@@ -195,7 +195,6 @@ public class ProductController {
 
 
     @GetMapping("/{username}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new EntityNotFoundException(
@@ -207,7 +206,7 @@ public class ProductController {
         return ResponseEntity.ok(user);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     @PostMapping("/products/{productId}/upload")
     public ResponseEntity<String> uploadFile(@PathVariable Integer productId, @RequestParam("file") MultipartFile file) {
         // Handle the file upload (e.g., save it to a storage location)
@@ -235,7 +234,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     @GetMapping("/products/{productId}/download")
     public ResponseEntity<Resource> downloadFile(@PathVariable Integer productId) throws IOException {
         // Retrieve the product from the database
@@ -260,7 +259,7 @@ public class ProductController {
                 .body(resource);
     }
     @GetMapping("/GetSimilarBooksByAuthor/{authorId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<List<Product>> getSimilarBooksByAuthor(@PathVariable("authorId") Integer authorId) {
         try {
             List<Product> similarBooks = productService.getSimilarBooksByAuthor(authorId);

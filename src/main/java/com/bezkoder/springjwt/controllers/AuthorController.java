@@ -35,7 +35,7 @@ public class AuthorController {
         return new ResponseEntity<ApiResponse>(new ApiResponse(true, "The Author has been Created Sucecsfully"), HttpStatus.CREATED);
     }
     @GetMapping("/{bookId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public Optional<Author> getAuthorbyId(@PathVariable("bookId") Integer bookId ) {
         return    authorService.readAuthor(bookId);
 
