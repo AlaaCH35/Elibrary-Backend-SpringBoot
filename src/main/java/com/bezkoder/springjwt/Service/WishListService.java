@@ -1,14 +1,18 @@
 package com.bezkoder.springjwt.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import com.bezkoder.springjwt.exceptions.AuthenticationFailException;
 import com.bezkoder.springjwt.models.Dto.product.ProductDto;
 import com.bezkoder.springjwt.models.Entity.Product;
 import com.bezkoder.springjwt.models.Entity.WishList;
 import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.repository.ProductRepository;
+import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class WishListService {
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private WishlistRepository wishlistRepository;
     private final WishlistRepository wishListRepository;
@@ -46,6 +52,27 @@ public class WishListService {
 
     }
 
+    public List<Product> addtoWishlist2(Long userId, Integer productId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AuthenticationFailException("fzfzfze"));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() ->  new AuthenticationFailException("fzfzfze"));
+
+        Optional<WishList> wishlistItem =  wishListRepository.findByUserAndProduct(user, product);
+
+        if (wishlistItem.isPresent()) {
+            wishListRepository.delete(wishlistItem.get());
+        } else {
+            WishList newWishlistItem = new WishList(user, product);
+            wishListRepository.save(newWishlistItem);
+        }
+
+        return  wishListRepository.findByUser(user)
+                .stream()
+                .map(WishList::getProduct)
+                .collect(Collectors.toList());
+    }
 
 
 
@@ -65,6 +92,15 @@ public class WishListService {
 
         }
     }
+
+    public int clearWishlist(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AuthenticationFailException("fzfzfze"));
+        wishListRepository.deleteAllByUser(user);
+        return 0;
+
+    }
+
 
     public boolean isItemInWishlist(Long userId, Integer productId) {
         List<WishList> wishlists =  wishlistRepository.findByUserId(userId);

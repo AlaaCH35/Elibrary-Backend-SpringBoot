@@ -21,14 +21,24 @@ public class Order {
     @Column(name = "created_date")
     private Date createdDate;
 
-    @Column(name = "total_price")
-    private Double totalPrice;
+    @Column(name = "carttotal_price")
+    private Double cartTotal;
+
+
 
     @Column(name = "session_id")
     private String sessionId;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<OrderItem> orderItems;
+    private List<Cart> orderDetails;
+
+    public List<Cart> getCarts() {
+        return orderDetails;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.orderDetails = carts;
+    }
 
     @ManyToOne()
     @JsonIgnore
@@ -39,14 +49,11 @@ public class Order {
     }
 
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
 
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
+    @PrePersist
+    private void prePersist() {
+        createdDate = new Date();
     }
-
     public Integer getId() {
         return id;
     }
@@ -64,12 +71,12 @@ public class Order {
         this.createdDate = createdDate;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
+    public Double getCartTotal() {
+        return cartTotal;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setCartTotal(Double cartTotal) {
+        this.cartTotal = cartTotal;
     }
 
     public String getSessionId() {

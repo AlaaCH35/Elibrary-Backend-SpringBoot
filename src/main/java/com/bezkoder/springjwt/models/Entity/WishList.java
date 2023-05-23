@@ -3,6 +3,7 @@ package com.bezkoder.springjwt.models.Entity;
 
 
 import com.bezkoder.springjwt.models.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.models.auth.In;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class WishList {
 
 
 
+    @JsonIgnore
     @ManyToOne (targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;

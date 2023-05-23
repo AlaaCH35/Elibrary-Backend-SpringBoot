@@ -26,8 +26,16 @@ public class Product {
     private @NotNull String name;
     private @NotNull double price;
     private @NotNull String description;
+    private String fileName;
 
-@JsonIgnore
+
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
@@ -50,12 +58,13 @@ public class Product {
 
 
 
-    public Product(ProductDto productDto, Category category) {
+    public Product(ProductDto productDto, Category category,Author author) {
         this.name = productDto.getName();
         this.imageModel=productDto.getImage();
         this.description = productDto.getDescription();
         this.price = productDto.getPrice();
         this.category = category;
+        this.author=author;
     }
 
     public Product(String name, ImageModel imageModel, double price, String description, Category category) {
