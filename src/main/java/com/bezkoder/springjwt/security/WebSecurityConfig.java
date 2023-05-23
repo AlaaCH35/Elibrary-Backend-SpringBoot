@@ -132,7 +132,10 @@ config.setAllowedHeaders(Arrays.asList("Access-Control-Max-Age", "3600"));
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests().antMatchers("/auth/**").permitAll()
             .antMatchers("/test/**").permitAll()
-
+            .antMatchers("/product/**").permitAll()
+            .antMatchers("/author/**").permitAll()
+            .antMatchers("/cart/**").permitAll()
+            .antMatchers("/category/**").permitAll()
             .antMatchers("/storage/**").permitAll()
             .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
 

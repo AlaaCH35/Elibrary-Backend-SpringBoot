@@ -74,25 +74,24 @@ public class AuthController {
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    Authentication authentication = authenticationManager
+            .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
-    String jwt = jwtUtils.generateJwtToken(authentication);
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-    List<String> roles = userDetails.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.toList());
+
+    String jwt = jwtUtils.generateJwtToken(userDetails);
+
+    List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+            .collect(Collectors.toList());
+
     RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+    System.out.println(refreshToken.getToken());
 
-    return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(),
-                         userDetails.getId(),
-                         userDetails.getUsername(),
-                         userDetails.getEmail(), 
-                         roles));
+    return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
+            userDetails.getUsername(), userDetails.getEmail(), roles));
   }
-
 
 
   @PostMapping("/signup")

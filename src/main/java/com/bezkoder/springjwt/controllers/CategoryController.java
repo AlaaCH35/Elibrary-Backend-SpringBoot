@@ -28,7 +28,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 
 	@GetMapping("/get")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<List<Category>> getCategories() {
         List<Category> body = categoryService.listCategories();
         return new ResponseEntity<List<Category>>(body, HttpStatus.OK);
@@ -57,7 +57,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{categoryId}")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
 	public Optional<Category> getCategorybyId(@PathVariable("categoryId") Integer categoryId ) {
 		return    categoryService.readCategory(categoryId);
 

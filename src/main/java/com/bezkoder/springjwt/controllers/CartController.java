@@ -19,7 +19,7 @@ public class CartController {
     CartService cartService;
 
     @PostMapping("/addToCart/{userId}/{bookId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<Integer> addBookToCart(
             @PathVariable("userId") Long userId,
             @PathVariable("bookId") Integer bookId) {
@@ -29,7 +29,7 @@ public class CartController {
         return ResponseEntity.ok(cartItemId);
     }
     @PutMapping ("/remove/{userId}/{bookId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<Integer> removeItemCart(
             @PathVariable("userId") Long userId,
             @PathVariable("bookId") Integer bookId) {
@@ -39,13 +39,13 @@ public class CartController {
         return ResponseEntity.ok(cartItemId);
     }
     @GetMapping("/get/{userId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<List<Cart>> getCartItems(@PathVariable("userId") Long userId) {
         List<Cart> cartItems = cartService.getCartItems(userId);
         return ResponseEntity.ok(cartItems);
     }
     @DeleteMapping ("/deleteAll/{userId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
 
     public ResponseEntity<Integer> clear(@PathVariable Long userId) {
         try {
@@ -56,7 +56,7 @@ public class CartController {
         }
     }
     @GetMapping("/count/{userId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+
     public ResponseEntity<Integer> getCartItemCount(@PathVariable("userId") Long userId) {
         int cartItemCount = cartService.getCartItemCount(userId);
         return ResponseEntity.ok(cartItemCount);

@@ -5,7 +5,13 @@ import java.util.List;
 public class JwtResponse {
   private String token;
 
+  public String getRefreshToken() {
+    return refreshToken;
+  }
 
+  public void setRefreshToken(String refreshToken) {
+    this.refreshToken = refreshToken;
+  }
 
   private String refreshToken;
   private String type = "Bearer";
