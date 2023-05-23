@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.Service;
 
 import com.bezkoder.springjwt.models.Dto.product.ProductDto;
+import com.bezkoder.springjwt.models.Entity.Author;
 import com.bezkoder.springjwt.models.Entity.Category;
 import com.bezkoder.springjwt.models.Entity.Product;
 import com.bezkoder.springjwt.repository.ProductRepository;
@@ -36,18 +37,18 @@ public class ProductService {
         return productDto;
     }
 
-    public static Product getProductFromDto(ProductDto productDto, Category category) {
-        Product product = new Product(productDto, category);
+    public static Product getProductFromDto(ProductDto productDto, Category category, Author author) {
+        Product product = new Product(productDto, category,author);
         return product;
     }
 
-    public void addProduct(ProductDto productDto, Category category) {
-        Product product = getProductFromDto(productDto, category);
+    public void addProduct(ProductDto productDto, Category category,Author author) {
+        Product product = getProductFromDto(productDto, category,author);
         productRepository.save(product);
     }
 
-    public void updateProduct(Integer productID, ProductDto productDto, Category category) {
-        Product product = getProductFromDto(productDto, category);
+    public void updateProduct(Integer productID, ProductDto productDto, Category category,Author author) {
+        Product product = getProductFromDto(productDto, category,author);
         product.setId(productID);
         productRepository.save(product);
     }
@@ -63,7 +64,13 @@ public class ProductService {
                        )
         );
     }
+    public List<Product> getProductsByCategory(Integer categoryId) {
+        return productRepository.findByCategory_Id(categoryId);
+    }
+    public List<Product> getSimilarBooksByAuthor(Integer authorId) {
 
+        return productRepository.findByAuthorId(authorId);
+    }
 
 
     public void deleteById(Integer id) {

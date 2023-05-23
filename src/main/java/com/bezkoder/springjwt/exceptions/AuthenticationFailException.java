@@ -12,5 +12,6 @@ public class AuthenticationFailException extends IllegalArgumentException {
     }
 
 
-
+    public AuthenticationFailException(String gg, String fzf) {
+    }
 }

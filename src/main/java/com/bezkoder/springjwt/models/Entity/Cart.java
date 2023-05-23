@@ -33,6 +33,10 @@ public class Cart {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     private int quantity;
 

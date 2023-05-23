@@ -1,15 +1,12 @@
 package com.bezkoder.springjwt.models.Dto.product;
 
 
-import com.bezkoder.springjwt.models.Dto.Wishlist.WishlistDto;
+import com.bezkoder.springjwt.models.Entity.Author;
 import com.bezkoder.springjwt.models.Entity.ImageModel;
 import com.bezkoder.springjwt.models.Entity.Product;
-import com.bezkoder.springjwt.models.Entity.WishList;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +22,8 @@ public class ProductDto {
     private @NotNull double price;
     private @NotNull String description;
     private @NotNull Integer categoryId;
-
+     private Author author;
+    private @NotNull Integer authorId;
 
     public ProductDto(Product product) {
  this.setId(product.getId());
@@ -34,6 +32,8 @@ public class ProductDto {
         this.setDescription(product.getDescription());
         this.setPrice(product.getPrice());
         this.setCategoryId(product.getCategory().getId());
+        this.setAuthorId(product.getAuthor().getId());
+
     }
 
     public static ProductDto fromEntity(Product product) {
@@ -47,6 +47,9 @@ public class ProductDto {
                 .description(product.getDescription())
                 .image(product.getImageModel())
                 .categoryId(product.getCategory().getId())
+                .authorId(product.getAuthor().getId())
+
+
                 .build();
     }
 

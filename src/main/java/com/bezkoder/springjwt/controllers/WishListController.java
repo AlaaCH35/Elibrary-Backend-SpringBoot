@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,23 +33,16 @@ public class WishListController {
         @Autowired
         ProductRepository productRepository;
 
-        @PostMapping("/toggle/{userId}/{id}")
-        public ResponseEntity<String> toggleWishlistItem(@PathVariable Long userId, @PathVariable Integer id) {
-
-                try {
-                        wishListService.addtoWishlist(userId, id);
-                        String message = "no";
-                        if (wishListService.isItemInWishlist(userId, id)) {
-                                message = "Item added to your Wishlist";
-                        } else {
-                                message = "Item removed from your Wishlist";
-                        }
-                        return new ResponseEntity<String>(message, HttpStatus.OK);
-                } catch (Exception e) {
-                        return new ResponseEntity<String>("Error occurred while toggling item in wishlist: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-                }
+        @PostMapping("/toggle/{userId}/{productId}")
+        @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+        public ResponseEntity<List<Product>> toggleWishlistItem(
+                @PathVariable Long userId,
+                @PathVariable Integer productId) {
+                List<Product> wishlist = wishListService.addtoWishlist2(userId,productId);
+                return ResponseEntity.ok(wishlist);
         }
         @GetMapping("/get/{userId}")
+        @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
         public List<Product> getWishlistItems(@PathVariable Long userId) {
                 List<WishList> wishlists = wishlistRepository.findByUserId(userId);
                 List<Product> products = new ArrayList<>();
@@ -61,11 +55,27 @@ public class WishListController {
         }
 
         @GetMapping("/get/all")
+        @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
         public List<WishList> getWishlistItems() {
                 List<WishList> wishlists = wishlistRepository.findAll();
 
                 return wishlists;
         }
+        @DeleteMapping("/{userId}")
+        @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+        public ResponseEntity<String> clearWishlist(@PathVariable Long userId) {
+                try {
+                        int count = wishListService.clearWishlist(userId);
+                        if (count > 0) {
+                                return ResponseEntity.ok("Wishlist cleared successfully.");
+                        } else {
+                                return ResponseEntity.ok("Wishlist is already empty.");
+                        }
+                } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while clearing wishlist: " + e.getMessage());
+                }
+        }
+
 
 
 }

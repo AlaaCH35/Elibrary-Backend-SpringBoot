@@ -1,8 +1,6 @@
 package com.bezkoder.springjwt.models.Dto.Wishlist;
 
-import com.bezkoder.springjwt.models.Dto.Rating.RatingDto;
 import com.bezkoder.springjwt.models.Entity.Product;
-import com.bezkoder.springjwt.models.Entity.Rating;
 import com.bezkoder.springjwt.models.Entity.WishList;
 import com.bezkoder.springjwt.models.User;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Data
